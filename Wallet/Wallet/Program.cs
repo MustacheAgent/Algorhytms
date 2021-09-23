@@ -30,8 +30,6 @@ namespace Wallet
             if (wallets.Max(t => t.Quantity) > coinsAmount) // если нельзя всеми монетами заполнить самый большой кошелек, то дальше решать смысла нет
                 return false;
 
-            
-
             return false;
         }
     }
