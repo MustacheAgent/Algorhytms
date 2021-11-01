@@ -26,13 +26,13 @@ namespace Testing
         public void Test1()
         {
             int[] res;
-            using (StreamReader reader = new StreamReader(TestContext.CurrentContext.TestDirectory + "test1.txt"))
+            using (StreamReader reader = new StreamReader(TestContext.CurrentContext.TestDirectory + "\\test1.txt"))
             {
                 int[] param = Array.ConvertAll(reader.ReadLine().Split(' '), int.Parse); // количество элементов и количество наборов перестановок
                 int[][] swaps = new int[param[1]][]; // массив массивов перестановок
                 for (int i = 0; i < param[1]; i++)
                 {
-                    swaps[i] = Array.ConvertAll(Console.ReadLine().Split(' '), s => int.Parse(s) - 1); // получение перестановок
+                    swaps[i] = Array.ConvertAll(reader.ReadLine().Split(' '), s => int.Parse(s) - 1); // получение перестановок
                 }
                 reader.ReadLine();
                 int[] swapsOrder = Array.ConvertAll(reader.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
