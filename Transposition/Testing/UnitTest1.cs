@@ -27,7 +27,7 @@ namespace Testing
                 }
                 reader.ReadLine();
                 int[] swapsOrder = Array.ConvertAll(reader.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
-                res = Program.Solve(swaps, swapsOrder);
+                res = Solution.Solve(swaps, swapsOrder);
             }
 
             int[] test = new int[] { 3, 1, 2 };
@@ -49,7 +49,7 @@ namespace Testing
                 }
                 reader.ReadLine();
                 int[] swapsOrder = Array.ConvertAll(reader.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
-                res = Program.Solve(swaps, swapsOrder);
+                res = Solution.Solve(swaps, swapsOrder);
             }
 
             int[] test = new int[] { 2, 1, 2 };
@@ -71,7 +71,7 @@ namespace Testing
                 }
                 reader.ReadLine();
                 int[] swapsOrder = Array.ConvertAll(reader.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
-                res = Program.Solve(swaps, swapsOrder);
+                res = Solution.Solve(swaps, swapsOrder);
             }
 
             int[] test = new int[] { 1 };
