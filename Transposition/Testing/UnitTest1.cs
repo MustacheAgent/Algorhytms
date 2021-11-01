@@ -10,16 +10,7 @@ namespace Testing
         [SetUp]
         public void Setup()
         {
-            int[] param = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse); // количество элементов и количество наборов перестановок
-            int[][] swaps = new int[param[1]][]; // массив массивов перестановок
-            for (int i = 0; i < param[1]; i++)
-            {
-                swaps[i] = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse); // получение перестановок
-            }
-            Console.ReadLine();
-            int[] swapsOrder = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse); // порядок применения перестановок
 
-            int[] res = Program.Solve(swaps, swapsOrder);
         }
 
         [Test]
