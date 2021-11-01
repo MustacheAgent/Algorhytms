@@ -1,57 +1,42 @@
 ﻿using System;
-using System.IO;
 
 namespace Transposition
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            int[] elements = new int[] { 1, 2, 3 };
-            StreamReader input = new StreamReader("../../input.txt");
-            int[] param = Array.ConvertAll(input.ReadLine().Split(' '), s => int.Parse(s)); // количество элементов и количество наборов перестановок
+            int[] param = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse); // количество элементов и количество наборов перестановок
             int[][] swaps = new int[param[1]][]; // массив массивов перестановок
-
             for (int i = 0; i < param[1]; i++)
             {
-                swaps[i] = Array.ConvertAll(input.ReadLine().Split(' '), s => int.Parse(s) - 1); // получение перестановок
+                swaps[i] = Array.ConvertAll(Console.ReadLine().Split(' '), s => int.Parse(s) - 1); // получение перестановок
+            }
+            Console.ReadLine();
+            int[] swapsOrder = Array.ConvertAll(Console.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
+
+            int[] res = Solve(swaps, swapsOrder);
+            foreach (var item in res)
+            {
+                Console.WriteLine((item + 1).ToString());
             }
 
-            input.ReadLine();
-            int[] swapsOrder = Array.ConvertAll(input.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
+            Console.ReadKey();
+        }
 
-            Console.WriteLine("");
+        public static int[] Solve(int[][] swaps, int[] swapsOrder)
+        {
+            int[] result = new int[swapsOrder.Length];
 
             for (int i = 0; i < swapsOrder.Length; i++)
             {
-                foreach (var item in elements)
+                for (int j = 0; j < swapsOrder.Length; j++)
                 {
-                    Console.Write(item.ToString() + " ");
+                    if (j == i) continue;
+                    result[i] = swaps[swapsOrder[j]][result[i]];
                 }
-                Console.Write("=> ");
-                Array.Sort((Array)swaps[swapsOrder[i]].Clone(), elements);
-                foreach (var item in elements)
-                {
-                    Console.Write(item.ToString() + " ");
-                }
-                Console.WriteLine("");
             }
-
-            Console.ReadKey();
-
-            /*
-            int[] elements = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse);
-            int[] swap = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse);
-
-            Array.Sort(swap, elements);
-
-            foreach(var item in elements)
-            {
-                Console.Write(item.ToString() + " ");
-            }
-
-            Console.ReadKey();
-            */
+            return result;
         }
     }
 }
