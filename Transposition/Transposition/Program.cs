@@ -28,13 +28,18 @@ namespace Transposition
                     // и в следующей перестановке проверяем уже запомненную позицию, запоминая следующую позицию, и так далее, пока не переберем все перестановки
                     result[i] = swaps[swapsOrder[j]][result[i]];
                 }
-                result[i]++; // массив нумеруется с нуля же
             }
 
+            for (int i = 0; i < result.Length; i++)
+            {
+                Console.WriteLine((result[i] + 1).ToString()); // вывод
+            }
+            /*
             foreach (var item in result)
             {
-                Console.WriteLine((item).ToString()); // вывод в файл
+                Console.WriteLine((item + 1).ToString()); // вывод
             }
+            */
         }
     }
 }
