@@ -13,22 +13,41 @@ namespace Transposition
             {
                 swaps[i] = Array.ConvertAll(Console.ReadLine().Split(' '), s => int.Parse(s) - 1); // получение перестановок
             }
-            Console.ReadLine();
+            int swapsAmount = int.Parse(Console.ReadLine());
             int[] swapsOrder = Array.ConvertAll(Console.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
-
-            int[] result = new int[swapsOrder.Length]; // массив ответов (позиций первого элемента)
-
-            for (int i = 0; i < swapsOrder.Length; i++) // исследуем каждую перестановку
+            
+            int[] origin = new int[swapsAmount];
+            for (int i = 0; i < swapsAmount; i++)
             {
-                for (int j = 0; j < swapsOrder.Length; j++) // применяем все перестановки кроме выбранной
+                if (i == 0)
                 {
-                    if (j == i) continue; // собственно пропускаем выбранную перестановку, если натыкаемся
+                    origin[i] = swaps[swapsOrder[i]][origin[i]];
+                }
+                else
+                {
+                    origin[i] = swaps[swapsOrder[i]][origin[i - 1]];
+                }
+            }
+            /*
+            Console.WriteLine();
+            for (int i = 0; i < origin.Length; i++)
+            {
+                Console.Write((origin[i] + 1).ToString() + " "); // вывод
+            }
+            */
+            
+            int[] result = new int[swapsAmount]; // массив ответов (позиций первого элемента)
 
+            for (int i = 0; i < swapsAmount; i++) // исследуем каждую перестановку
+            {
+                if (i > 0) result[i] = origin[i - 1];
+                for (int j = i + 1; j < swapsAmount; j++) // применяем все перестановки кроме выбранной
+                {
                     // смотрим на индекс первого элемента в первой применяемой перестановке, запоминаем его новую позицию,
                     // и в следующей перестановке проверяем уже запомненную позицию, запоминая следующую позицию, и так далее, пока не переберем все перестановки
                     result[i] = swaps[swapsOrder[j]][result[i]];
                 }
-            }
+            }            
 
             Console.WriteLine();
             for (int i = 0; i < result.Length; i++)
