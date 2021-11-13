@@ -15,7 +15,7 @@ namespace Transposition
             }
             int swapsAmount = int.Parse(Console.ReadLine());
             int[] swapsOrder = Array.ConvertAll(Console.ReadLine().Split(' '), s => int.Parse(s) - 1); // порядок применения перестановок
-            
+            /*
             int[] origin = new int[swapsAmount];
             for (int i = 0; i < swapsAmount; i++)
             {
@@ -27,7 +27,7 @@ namespace Transposition
                 {
                     origin[i] = swaps[swapsOrder[i]][origin[i - 1]];
                 }
-            }
+            }*/
             /*
             Console.WriteLine();
             for (int i = 0; i < origin.Length; i++)
@@ -37,7 +37,24 @@ namespace Transposition
             */
             
             int[] result = new int[swapsAmount]; // массив ответов (позиций первого элемента)
+            int prev = 0;
+            for (int i = 0; i < swapsAmount; i++) // исследуем каждую перестановку
+            {
+                if (i == 1)
+                {
+                    result[i] = prev = swaps[swapsOrder[i - 1]][prev];
+                }
+                else if (i > 1)
+                {
+                    result[i] = prev = swaps[swapsOrder[i - 1]][prev];
+                }
+                for (int j = i + 1; j < swapsAmount; j++) // исследуем все перестановки после исключенной
+                {
+                    result[i] = swaps[swapsOrder[j]][result[i]];
+                }
+            }
 
+            /*
             for (int i = 0; i < swapsAmount; i++) // исследуем каждую перестановку
             {
                 if (i > 0) result[i] = origin[i - 1];
@@ -47,14 +64,15 @@ namespace Transposition
                     // и в следующей перестановке проверяем уже запомненную позицию, запоминая следующую позицию, и так далее, пока не переберем все перестановки
                     result[i] = swaps[swapsOrder[j]][result[i]];
                 }
-            }            
+            }
+            */
 
             Console.WriteLine();
             for (int i = 0; i < result.Length; i++)
             {
                 Console.Write((result[i] + 1).ToString() + " "); // вывод
             }
-
+            
             Console.ReadKey();
         }
     }
