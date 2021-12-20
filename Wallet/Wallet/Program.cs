@@ -1,34 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Wallet
+namespace ProblemD
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            int walletsQuantity = int.Parse(Console.ReadLine()); // количество кошельков
-            var wallets = Console.ReadLine().Split(' ').Select(int.Parse).Select(el => new Wallet { Quantity = el }).ToList(); // конфигурация кошельков
-            //wallets.Sort(Comparer<Wallet>.Create((w1, w2) => w1.Size.CompareTo(w2.Size)));
+        	int b = 0;
+            Console.ReadLine(); // количество кошельков
+            var wallets = Console.ReadLine().Split(' ').Select(int.Parse).Select(el => new Wallet { MyQuantity = el }).ToList(); // количество денег в каждом кошельке
+            wallets.Sort(Comparer<Wallet>.Create((w1, w2) => w1.MyQuantity.CompareTo(w2.MyQuantity)));
 
-            int coinsQuantity = int.Parse(Console.ReadLine()); // общее количество монет
+            int count = int.Parse(Console.ReadLine()); // общее количество денег
 
-            Console.WriteLine(CheckForConfiguration(wallets, coinsQuantity) ? "true" : "false");
+            var max = wallets.Select(el => el.MyQuantity).Sum(); // максимально возможное количество денег во всех кошельках
+
+            Console.Write(Check(count, wallets, max, 0) ? "Yes" : "No");
         }
 
         /// <summary>
-        /// Проверяет наличие конфигурации.
+        /// Проверить распределение денег по кошелькам
         /// </summary>
-        /// <param name="wallets">Кошельки.</param>
-        /// <param name="coinsAmount">Оставшееся количество денег.</param>
-        /// <returns>Да или нет?</returns>
-        static bool CheckForConfiguration(List<Wallet> wallets, int coinsAmount)
+        /// <param name="num">Общее количество денег</param>
+        /// <param name="wallets">Кошельки</param>
+        /// <param name="max">Максимально возможное количество денег во всех кошельках</param>
+        /// <param name="pointer">Индекс кошелька</param>
+        /// <returns></returns>
+        private static bool Check(int num, List<Wallet> wallets, int max, int pointer)
         {
-            if (wallets.Max(t => t.Quantity) > coinsAmount) // если нельзя всеми монетами заполнить самый большой кошелек, то дальше решать смысла нет
-                return false;
+            while (true)
+            {
+                if (pointer == wallets.Count || max < num) 
+                    return false;
+
+                if (num == max) 
+                    return true;
+
+                if (TryNest(wallets, pointer) && Check(num, wallets, max - wallets[pointer].MyQuantity, pointer + 1)) 
+                    return true;
+
+                if (wallets[pointer].In != null) 
+                    TakeOut(wallets[pointer]);
+
+                pointer += 1;
+            }
+        }
+
+        /// <summary>
+        /// Убрать вложенный кошелек
+        /// </summary>
+        /// <param name="wallet">кошелек, который надо убрать</param>
+        private static void TakeOut(Wallet wallet)
+        {
+            wallet.In.NestedQuantity -= wallet.MyQuantity;
+            wallet.In = null;
+        }
+
+        /// <summary>
+        /// Попытаться засунуть кошелек в один из следующих
+        /// </summary>
+        /// <param name="wallets">Кошельки</param>
+        /// <param name="pointer">Впихиваемый кошелек</param>
+        /// <returns></returns>
+        private static bool TryNest(List<Wallet> wallets, int pointer)
+        {
+            var current = wallets[pointer];
+            for (int i = pointer + 1; i < wallets.Count; i++)
+            {
+                // в каждом кошельке должна быть хотя бы одна не вложенная монета, поэтому неподходящие кошельки пропускаем
+                if (wallets[i].MyQuantity == current.MyQuantity || wallets[i].NestedQuantity + current.MyQuantity > wallets[i].MyQuantity - 1)
+                    continue;
+
+                wallets[i].NestedQuantity += current.MyQuantity;
+                current.In = wallets[i];
+                return true;
+            }
 
             return false;
         }
@@ -36,8 +84,17 @@ namespace Wallet
 
     class Wallet
     {
-        public List<Wallet> In { get; set; }
-        public int Quantity { get; set; }
-        public int Filling { get; set; }
+        /// <summary>
+        /// Вложенный кошелек
+        /// </summary>
+        public Wallet In { get; set; }
+        /// <summary>
+        /// Количество денег в кошельке
+        /// </summary>
+        public int MyQuantity { get; set; }
+        /// <summary>
+        /// Общее количество денег во вложенных кошельках
+        /// </summary>
+        public int NestedQuantity { get; set; }
     }
 }
